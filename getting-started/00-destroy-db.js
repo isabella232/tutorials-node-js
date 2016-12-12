@@ -2,10 +2,13 @@ var faunadb = require('faunadb'),
   q = faunadb.query,
   Ref = q.Ref;
 
+var adminSecret = require("../secrets").admin
+
 var log = console.log.bind(console);
 
 var adminClient = new faunadb.Client({
-  secret: require("../secrets").admin
+  secret: adminSecret
 });
 
-adminClient.query(q.Create(Ref("databases"), { name: "my_app" })).then(log).catch(log)
+adminClient.query(q.Delete(Ref("databases/blog_db"))).
+then(log).catch(log);

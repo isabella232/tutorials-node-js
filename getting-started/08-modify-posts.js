@@ -5,8 +5,9 @@ var faunadb = require('faunadb'),
 
 var log = console.log.bind(console);
 
+var secret = require("../secrets").admin
 var client = new faunadb.Client({
-  secret: "kqnPAhB5YtYAAAK0IQRg077SDW6vF0nmqQOMBA9q2hU"
+  secret: secret+":blog_db:server"
 });
 
 client.query(

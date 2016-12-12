@@ -3,8 +3,9 @@ var faunadb = require('faunadb'),
   q = faunadb.query,
   Ref = q.Ref;
 
+var secret = require("../secrets").admin
 var client = new faunadb.Client({
-  secret: "kqnPAhB5YtYAAAK0IQRg077SDW6vF0nmqQOMBA9q2hU"
+  secret: secret+":blog_db:server"
 });
 client.query(q.Create(Ref("classes"), { name: "posts" })).then(function (res) {
   console.log(res)

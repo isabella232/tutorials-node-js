@@ -5,8 +5,9 @@ var faunadb = require('faunadb'),
 
 var log = console.log.bind(console);
 
+var adminSecret = require("../secrets").admin;
 var client = new faunadb.Client({
-  secret: "YOUR_GRAPHDB_KEY"
+  secret: adminSecret + ":my_app:server"
 });
 
 console.log("create people");

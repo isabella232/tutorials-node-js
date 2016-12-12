@@ -6,7 +6,7 @@ var faunadb = require('faunadb'),
 var log = console.log.bind(console);
 
 var client = new faunadb.Client({
-  secret: "YOUR_GRAPHDB_KEY"
+  secret: require("../secrets").admin + ":my_app:server"
 });
 
 console.log("get alice ref")
@@ -22,7 +22,7 @@ client.query(
   }).then(log).catch(log).then(function () {
     console.log("get alice name");
     return client.query(
-      q.Map(Match(Ref("indexes/people_by_name"), "alice"), function(person) {
+      q.Map(q.Paginate(Match(Ref("indexes/people_by_name"), "alice")), function(person) {
         return q.Select(['data', 'name'], q.Get(person));
       }));
   }).then(log).catch(log).then(function () {
@@ -35,4 +35,7 @@ client.query(
       q.Map(people, function(person) {
         return q.Select(['data', 'name'], q.Get(person));
       }));
-  }).then(log).catch(log);
+  }).then(log).catch(log).then(function () {
+    console.log('all people')
+    return client.query(q.Paginate(q.Match(Ref("indexes/people"))));
+  }).then(log).catch(log)

@@ -5,10 +5,10 @@ var faunadb = require('faunadb'),
 
 var log = console.log.bind(console);
 
+var secret = require("../secrets").admin
 var client = new faunadb.Client({
-  secret: "kqnPAhB5YtYAAAK0IQRg077SDW6vF0nmqQOMBA9q2hU"
+  secret: secret+":blog_db:server"
 });
-
 
 client.query(
   q.Do(
@@ -26,7 +26,7 @@ client.query(
     })
   )).then(log).then(function () {
 
-    client.query(
+    return client.query(
   q.Paginate(q.Match(Ref("indexes/posts_by_tags_with_title"), "travel")),
     { size: 2 }).then(function (res) {
       console.log("page one", res)
@@ -38,10 +38,10 @@ client.query(
           console.log("page two", res)
 
           var posts = q.Paginate(q.Match(Ref("indexes/posts_by_tags_with_title"), "travel"));
-          client.query(q.Map(posts, function(post) { return q.Casefold(post); })).then(log)
+          return client.query(q.Map(posts, function(post) { return q.Casefold(post); })).then(log)
 
         })
     })
 
 
-  })
+  }).catch(log)

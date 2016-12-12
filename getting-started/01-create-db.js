@@ -4,16 +4,8 @@ var faunadb = require('faunadb'),
   Ref = q.Ref;
 
 var adminClient = new faunadb.Client({
-  secret: "YOUR_FAUNA_SECRET"
+  secret: require("../secrets").admin
 });
 adminClient.query(q.Create(Ref("databases"), { name: "blog_db" })).then(function (response) {
   console.log(response)
-})
-
-// this is not a repl, need .then() and console.log
-// => {
-//   "ref": { "@ref": "databases/blog_db" },
-//   "class": { "@ref": "databases" },
-//   "ts": 1436375112141542,
-//   "name": "blog_db"
-// }
+}).catch(console.log.bind(console, "error"))

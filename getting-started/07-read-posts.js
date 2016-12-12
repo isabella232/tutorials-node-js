@@ -3,9 +3,12 @@ var faunadb = require('faunadb'),
   q = faunadb.query,
   Ref = q.Ref;
 
+var secret = require("../secrets").admin
 var client = new faunadb.Client({
-  secret: "kqnPAhB5YtYAAAK0IQRg077SDW6vF0nmqQOMBA9q2hU"
+  secret: secret+":blog_db:server"
 });
+
+// todo merge files 6-10 into explore so we can use known created ids
 
 client.query(q.Get(Ref("classes/posts/148756377980895233"))).then(function (res) {
   console.log("load via id")
